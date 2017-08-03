@@ -49,6 +49,12 @@ public class Login extends AppCompatActivity {
         mPassButton = (Button) findViewById(R.id.b_pass);
 
 
+        mSendData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         final Firebase mRefChildListen = mRootRef.child("User");
         mRefChildListen.addValueEventListener(new ValueEventListener() {
             @Override
