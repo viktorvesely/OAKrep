@@ -24,9 +24,11 @@ public class Post {
 
         this.mReputation = defaultRep;
         this.mTimestamp = System.currentTimeMillis();
+        this.mLastActivity = System.currentTimeMillis();
         this.mLinkToComments = " ";
-
+        this.mActive = true;
     }
+
 
     //private List<Comment> mComments; in a future
     //user set
@@ -41,6 +43,8 @@ public class Post {
     //generated
     public int mReputation;
     public long mTimestamp;
+    public long mLastActivity;
+    public boolean mActive;
 
     //may change in future
     public String mLinkToComments;

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Oakapplication</string>
+    <string name="title_activity_main_screen">MainScreen</string>
+    <string name="facebook_app_id">1916678708584576</string>
 </resources>

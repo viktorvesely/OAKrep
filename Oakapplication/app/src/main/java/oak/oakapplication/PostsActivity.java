@@ -2,6 +2,7 @@ package oak.oakapplication;
 
 import android.location.Address;
 import android.location.Geocoder;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -37,7 +38,8 @@ public class PostsActivity extends AppCompatActivity {
     private Spinner mCategories;
 
 
-    private final String[] categories = {"problemy","v procese", "vyriesene"};
+    private final static int MaxTagsPerPost = 3;
+    private final String[] categories = {"Problemy","V procese", "Vyriesene"};
 
 
     @Override
@@ -69,6 +71,22 @@ public class PostsActivity extends AppCompatActivity {
                 List<Address> addresses = null;
                 double longitude = 0;
                 double latitude = 0;
+
+                String tags = mTags.getText().toString();
+                int numberOfTags = 0;
+
+                for (int i = 0; i < tags.length(); ++i)
+                {
+                    if (tags.charAt(i) == ','){
+                        numberOfTags++;
+                    }
+                }
+
+                if (numberOfTags > MaxTagsPerPost){
+                    Snackbar.make(v, "Maximalne 4 tagy", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+
                 try {
                     addresses = geocoder.getFromLocationName(mAddress.getText().toString(),1);
                 } catch (IOException e) {
