@@ -3,6 +3,7 @@
     package="oak.oakapplication">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:name=".OakappMain"
@@ -21,7 +22,6 @@
             </intent-filter>
         </activity>
         <activity android:name= ".PostsActivity" />
-        <activity android:name= ".Login"></activity>
     </application>
 
 </manifest>

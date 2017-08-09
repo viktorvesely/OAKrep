@@ -103,4 +103,18 @@
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_editor_absoluteY="321dp" />
 
+    <EditText
+        android:id="@+id/et_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="43dp"
+        android:ems="10"
+        android:hint="Nadpis"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/et_postText" />
+
 </android.support.constraint.ConstraintLayout>

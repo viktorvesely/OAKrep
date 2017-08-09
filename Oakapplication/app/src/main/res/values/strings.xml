@@ -2,4 +2,12 @@
     <string name="app_name">Oakapplication</string>
     <string name="title_activity_main_screen">MainScreen</string>
     <string name="facebook_app_id">1916678708584576</string>
+
+    <string name="min_tags">Aspon jeden tag</string>
+    <string name="max_tags">Maximalne 4 tagy</string>
+    <string name="no_title">Musis zadat nadpis</string>
+    <string name="no_text">Musis napisat nejaky text do postu</string>
+    <string name="complete_action">Dokonci akciu s</string>
+
+
 </resources>

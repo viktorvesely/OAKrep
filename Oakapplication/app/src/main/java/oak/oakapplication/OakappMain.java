@@ -12,6 +12,9 @@ public class OakappMain extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
-        Firebase.setAndroidContext(this);
+        user = new User();
     }
+
+
+    public User user;
 }
