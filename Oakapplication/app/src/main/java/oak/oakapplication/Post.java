@@ -13,7 +13,8 @@ public class Post {
 
     public Post() { }
 
-    public Post (String postText, String title ,String ownerOfPost, String ImgURL, String ImgURL2, String Tags, long Category, double Latitude, double Longitude) {
+    public Post (String postText, String title ,String ownerOfPost, String ImgURL, String ImgURL2,
+                 String Tags, long Category, double Latitude, double Longitude) {
         this.mText = postText;
         this.mTitle = title;
         this.mOwner = ownerOfPost;
@@ -43,6 +44,7 @@ public class Post {
     public long mCategory;
     public double mLatitude;
     public double mLongitude;
+    public String mKey;
     //generated
     public int mReputation;
     public long mTimestamp;

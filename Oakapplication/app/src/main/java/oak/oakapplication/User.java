@@ -36,6 +36,22 @@ public class User {
     public void SetRank (String rank) {mRank = rank;}
     public String Rank() {return mRank;}
 
+    public boolean ActivateUser (String username, int reputation, boolean isActive, boolean isAdmin, ArrayList<Post> hisPosts, ArrayList<Post> favoritePosts)
+    {
+        mActive = isActive;
+        if (mActive == false)
+            return false;
+        mUsername = username;
+        mReputation = reputation;
+        mLevel = OakappMain.getRankLevelFromRep(mReputation);
+        mRank = OakappMain.getRankFromLevel(mLevel);
+        mAdmin = isAdmin;
+        mOwnPosts = hisPosts;
+        mFavoritePosts = favoritePosts;
+
+        return true;
+    }
+
     public Location GetUserCurrentLocation() {
         Location current = null;
         if (HasInternetAcces() == false) {

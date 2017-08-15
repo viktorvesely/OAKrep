@@ -37,6 +37,7 @@ public class MainScreen extends AppCompatActivity {
     private OakappMain main;
     public static MainScreen selfPointer;
     private ListView mPostsListView;
+    private FloatingActionButton fab;
 
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseAuth mFirebaseAuth;
@@ -51,8 +52,29 @@ public class MainScreen extends AppCompatActivity {
         setContentView(R.layout.activity_main_screen);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        main = ((OakappMain)getApplicationContext());
+        if (main.user.HasInternetAcces() == false) {
+            Snackbar.make(this.findViewById(android.R.id.content), getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
+
+        //find views
+
+        mButtonSignOut = (Button) findViewById(R.id.b_signOut);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        mPostsListView = (ListView) findViewById(R.id.lv_listOfPosts);
+
+        //Init
         selfPointer = this;
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        mRootRef = FirebaseDatabase.getInstance().getReference();
+        mPostRef = mRootRef.child("Posts");
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        adapter = new PostArrayAdapter(this,main.postsToShow);
+        mPostsListView.setAdapter(adapter);
+
+        //listeners
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,21 +82,6 @@ public class MainScreen extends AppCompatActivity {
                 startActivity(newPost);
             }
         });
-
-        main = ((OakappMain)getApplicationContext());
-        if (main.user.HasInternetAcces() == false) {
-            Snackbar.make(this.findViewById(android.R.id.content), getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).setAction("Action", null).show();
-        }
-
-        adapter = new PostArrayAdapter(this,main.postsToShow);
-
-
-        mPostsListView = (ListView) findViewById(R.id.lv_listOfPosts);
-        mPostsListView.setAdapter(adapter);
-
-        mRootRef = FirebaseDatabase.getInstance().getReference();
-        mPostRef = mRootRef.child("Posts");
-        mFirebaseAuth = FirebaseAuth.getInstance();
 
         mPostsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -109,7 +116,6 @@ public class MainScreen extends AppCompatActivity {
             }
         };
 
-        mButtonSignOut = (Button) findViewById(R.id.b_signOut);
         mButtonSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
