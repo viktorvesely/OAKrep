@@ -2,6 +2,7 @@ package oak.oakapplication;
 
 import android.nfc.Tag;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public class Post {
         this.mReputation = defaultRep;
         this.mTimestamp = System.currentTimeMillis();
         this.mLastActivity = System.currentTimeMillis();
-        this.mLinkToComments = " ";
+        this.comments = new ArrayList<Comment>();
         this.mActive = true;
     }
 
@@ -49,7 +50,7 @@ public class Post {
     public boolean mActive;
 
     //may change in future
-    public String mLinkToComments;
+    public ArrayList<Comment> comments;
 
     //static
     private static final int defaultRep = 0;

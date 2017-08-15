@@ -141,7 +141,7 @@ public class PostsActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                if(addresses == null) { Snackbar.make(v, "nenasla sa adresa", Snackbar.LENGTH_LONG).setAction("Action", null).show();}
+                if(addresses == null) { Snackbar.make(v, getString(R.string.no_address_found), Snackbar.LENGTH_LONG).setAction("Action", null).show();}
                 else if(addresses.size() > 0) {
                         latitude= addresses.get(0).getLatitude();
                         longitude= addresses.get(0).getLongitude();

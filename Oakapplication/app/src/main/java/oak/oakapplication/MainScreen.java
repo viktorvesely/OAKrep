@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -25,16 +26,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class MainScreen extends AppCompatActivity {
 
     private DatabaseReference mRootRef;
     private DatabaseReference mPostRef;
     private ChildEventListener mPostListener;
-    private ArrayList<Post> mPostsToShow;
     private PostArrayAdapter adapter;
     private OakappMain main;
-    private MainScreen selfPointer;
+    public static MainScreen selfPointer;
     private ListView mPostsListView;
 
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -61,8 +62,12 @@ public class MainScreen extends AppCompatActivity {
         });
 
         main = ((OakappMain)getApplicationContext());
-        mPostsToShow = new ArrayList<Post>();
-        adapter = new PostArrayAdapter(this,mPostsToShow);
+        if (main.user.HasInternetAcces() == false) {
+            Snackbar.make(this.findViewById(android.R.id.content), getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
+
+        adapter = new PostArrayAdapter(this,main.postsToShow);
+
 
         mPostsListView = (ListView) findViewById(R.id.lv_listOfPosts);
         mPostsListView.setAdapter(adapter);
@@ -71,6 +76,15 @@ public class MainScreen extends AppCompatActivity {
         mPostRef = mRootRef.child("Posts");
         mFirebaseAuth = FirebaseAuth.getInstance();
 
+        mPostsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Intent openPost = new Intent(selfPointer, oak.oakapplication.openPost.class);
+                openPost.putExtra("id",position);
+                startActivity(openPost);
+            }
+        });
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -149,7 +163,8 @@ public class MainScreen extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Post post = dataSnapshot.getValue(Post.class);
-                mPostsToShow.add(post);
+                main.postsToShow.add(post);
+                adapter.add(post);
             }
 
             @Override

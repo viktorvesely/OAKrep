@@ -8,6 +8,19 @@
     <string name="no_title">Musis zadat nadpis</string>
     <string name="no_text">Musis napisat nejaky text do postu</string>
     <string name="complete_action">Dokonci akciu s</string>
+    <string name="no_internet_connection">Nemas pripojenie k internetu</string>
+    <string name="no_address_found">Nenasla sa zaidna adresa</string>
+
+
+
+
+
+
+    <string name="default_rank">Obcan</string>
+    <string name="rank_level1">SuperObcan</string>
+    <string name="rank_level2">SuperSuperObcan</string>
+
+    <!-- KEEP THIS FORMATING (RANKS)!!!  -->
 
 
 </resources>
