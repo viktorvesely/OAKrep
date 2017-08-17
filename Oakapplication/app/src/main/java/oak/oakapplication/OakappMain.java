@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.firebase.client.Firebase;
 import com.firebase.client.core.Context;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,7 @@ public class OakappMain extends Application{
     public void onCreate() {
         super.onCreate();
         user = new User();
+        firebaseUser = null;
         selfPointer = this;
         postsToShow = new ArrayList<Post>();
     }
@@ -36,6 +38,7 @@ public class OakappMain extends Application{
 
     public ArrayList<Post> postsToShow;
     public User user;
+    public FirebaseUser firebaseUser;
 
     public static OakappMain selfPointer;
     public static final int MAXRANKLEVEL = 30;

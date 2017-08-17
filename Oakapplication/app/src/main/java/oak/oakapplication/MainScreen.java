@@ -96,9 +96,9 @@ public class MainScreen extends AppCompatActivity {
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                onSignedInInit(user.getDisplayName());
+                main.firebaseUser = firebaseAuth.getCurrentUser();
+                if (main.firebaseUser != null) {
+                onSignedInInit();
                 }
                 else {
                     onSignedOutCleanUp();
@@ -150,8 +150,8 @@ public class MainScreen extends AppCompatActivity {
         mFirebaseAuth.addAuthStateListener(mAuthListener);
     }
 
-    private void onSignedInInit(String userName) {
-        main.user.mUsername = userName;
+    private void onSignedInInit() {
+
         attachDatabaseReadListener();
     }
 
@@ -169,6 +169,7 @@ public class MainScreen extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Post post = dataSnapshot.getValue(Post.class);
+                post.mKey = dataSnapshot.getKey();
                 main.postsToShow.add(post);
                 adapter.add(post);
             }
@@ -203,7 +204,6 @@ public class MainScreen extends AppCompatActivity {
             mPostListener = null;
         }
     }
-
 
 
 }
