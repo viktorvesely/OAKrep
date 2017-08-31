@@ -2,6 +2,7 @@ package oak.oakapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.location.Location;
 import com.facebook.FacebookSdk;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -13,15 +14,19 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+
 import com.firebase.client.Firebase;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.gms.location.LocationListener;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.OAuthProvider;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +37,7 @@ public class MainScreen extends AppCompatActivity {
 
     private DatabaseReference mRootRef;
     private DatabaseReference mPostRef;
+    private DatabaseReference mUserRef;
     private ChildEventListener mPostListener;
     private PostArrayAdapter adapter;
     private OakappMain main;
@@ -55,8 +61,9 @@ public class MainScreen extends AppCompatActivity {
 
 
         main = ((OakappMain)getApplicationContext());
-        if (main.user.HasInternetAcces() == false) {
+        if (OakappMain.HasInternetAcces() == false) {
             Snackbar.make(this.findViewById(android.R.id.content), getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+
         }
 
         //find views
@@ -69,8 +76,9 @@ public class MainScreen extends AppCompatActivity {
         selfPointer = this;
         mRootRef = FirebaseDatabase.getInstance().getReference();
         mPostRef = mRootRef.child("Posts");
+        mUserRef = mRootRef.child("Users");
         mFirebaseAuth = FirebaseAuth.getInstance();
-        adapter = new PostArrayAdapter(this,main.postsToShow);
+        adapter = new PostArrayAdapter(this, OakappMain.postsToShow);
         mPostsListView.setAdapter(adapter);
 
         //listeners
@@ -96,8 +104,8 @@ public class MainScreen extends AppCompatActivity {
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                main.firebaseUser = firebaseAuth.getCurrentUser();
-                if (main.firebaseUser != null) {
+                OakappMain.firebaseUser = firebaseAuth.getCurrentUser();
+                if (OakappMain.firebaseUser != null) {
                 onSignedInInit();
                 }
                 else {
@@ -152,11 +160,37 @@ public class MainScreen extends AppCompatActivity {
 
     private void onSignedInInit() {
 
-        attachDatabaseReadListener();
+        mUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(OakappMain.firebaseUser.getUid())) {
+                    OakappMain.getUserByUid(OakappMain.firebaseUser.getUid(), new UserInterface() {
+                        @Override
+                        public void UserListener(User u) {
+                            OakappMain.user = u;
+                            ReputationManager.Init();
+                            OakappMain.user.lastLogged = System.currentTimeMillis();
+                            attachDatabaseReadListener();
+                        }
+                    });
+                }
+                else {
+                    User u = new User();
+                    u.ActivateUser(OakappMain.firebaseUser.getDisplayName(),0,true,false, OakappMain.firebaseUser.getUid());
+                    mUserRef.child(OakappMain.firebaseUser.getUid()).setValue(u);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     private void onSignedOutCleanUp () {
-        main.user.mUsername = "anonymous";
+        OakappMain.user.mUsername = "anonymous";
         adapter.clear();
     }
 
@@ -169,8 +203,7 @@ public class MainScreen extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Post post = dataSnapshot.getValue(Post.class);
-                post.mKey = dataSnapshot.getKey();
-                main.postsToShow.add(post);
+                OakappMain.postsToShow.add(post);
                 adapter.add(post);
             }
 
@@ -204,6 +237,7 @@ public class MainScreen extends AppCompatActivity {
             mPostListener = null;
         }
     }
+
 
 
 }

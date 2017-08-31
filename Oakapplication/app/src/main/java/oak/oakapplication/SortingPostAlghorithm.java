@@ -14,7 +14,7 @@ public class SortingPostAlghorithm implements Comparator<Post> {
         int positivemeansfirstisgreater = 0;
         float distanceBetweenuUserAndPost = Float.MAX_VALUE;
 
-        Location currentUserLocation = main.user.GetUserCurrentLocation();
+        Location currentUserLocation = OakappMain.lastLocation;
         if (currentUserLocation != null) {
 
         }

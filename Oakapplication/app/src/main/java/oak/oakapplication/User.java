@@ -4,8 +4,19 @@ import android.content.Context;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.SystemClock;
 
+import com.firebase.client.Firebase;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by viktor on 8.8.2017.
@@ -14,29 +25,34 @@ import java.util.ArrayList;
 public class User {
 
     User () {
-        mUsername = "";
-        mReputation = 0;
-        mLevel = 0;
-        mRank = OakappMain.getRankFromLevel(mLevel);
+
     }
 
     public String mUsername;
     public int mReputation;
+    public long mJudgePower;
     public boolean mActive;
     public boolean mAdmin;
-    public ArrayList<Post>mOwnPosts;
-    public ArrayList<Post>mFavoritePosts;
+    public List<String> mOwnPosts;
+    public List<String> mOwnComments;
+    public List<String>mFavoritePosts;
+    public String mId;
+    public long lastLogged;
+
+
 
     //generated;
     private String mRank;
     private int mLevel;
+
+
 
     public void SetLevel(int level) {mLevel = level;}
     public int Level() {return mLevel;}
     public void SetRank (String rank) {mRank = rank;}
     public String Rank() {return mRank;}
 
-    public boolean ActivateUser (String username, int reputation, boolean isActive, boolean isAdmin, ArrayList<Post> hisPosts, ArrayList<Post> favoritePosts)
+    public boolean ActivateUser (String username, int reputation, boolean isActive, boolean isAdmin, String id)
     {
         mActive = isActive;
         if (mActive == false)
@@ -46,30 +62,19 @@ public class User {
         mLevel = OakappMain.getRankLevelFromRep(mReputation);
         mRank = OakappMain.getRankFromLevel(mLevel);
         mAdmin = isAdmin;
-        mOwnPosts = hisPosts;
-        mFavoritePosts = favoritePosts;
+        mOwnPosts.add("INIT");
+        mFavoritePosts.add("INIT");
+        mId = id;
+        mJudgePower = OakappMain.remoteConfig.getLong("judgepower_default_value");
+
 
         return true;
     }
 
-    public Location GetUserCurrentLocation() {
-        Location current = null;
-        if (HasInternetAcces() == false) {
-            return current;
-        }
-
-
-        return current;
+    public void AddReputation(int repBoost) {
+        mReputation += repBoost;
+        mLevel = OakappMain.getRankLevelFromRep(mReputation);
+        mRank = OakappMain.getRankFromLevel(mLevel);
     }
 
-    public boolean HasInternetAcces () {
-        boolean yes;
-        ConnectivityManager connectivityManager = (ConnectivityManager)OakappMain.selfPointer.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
-            yes = true;
-        }
-        else {yes = false;}
-        return yes;
-    }
 }

@@ -8,16 +8,16 @@ public class Comment {
 
     public Comment() { }
 
-    public Comment (String comText, String comOwner, String motherPost, boolean direct_msg){
+    public Comment (String comText, String comOwner, String motherPost, boolean direct_msg, String target){
         mComText = comText;
         mComOwner = comOwner;
         mMotherPost = motherPost;
         mDirectmsg = direct_msg;
+        mDirectTarget = target;
 
-        mVisiblity = true;
-        mComTimestamp = System.currentTimeMillis();
-        mPlus = 0;
-        mMinus = 0;
+        mActive = true;
+        mTimestamp = System.currentTimeMillis();
+        mUpvotes = 0;
     }
 
     //user set
@@ -25,11 +25,12 @@ public class Comment {
     public String mComOwner;
     public String mMotherPost;
     public boolean mDirectmsg;
+    public String mDirectTarget;
 
     //generated
-    public long mComTimestamp;
-    public int mPlus;
-    public int mMinus;
-    public boolean mVisiblity;
+    public String mKey;
+    public long mTimestamp;
+    public int mUpvotes;
+    public boolean mActive;
 
 }

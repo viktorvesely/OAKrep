@@ -117,7 +117,7 @@ public class PostsActivity extends AppCompatActivity {
                 double latitude = 0;
 
                 String tags = mTags.getText().toString();
-                int numberOfTags = 0;
+                int numberOfTags = 1;
 
                 if (tags.isEmpty()) { Snackbar.make(v, getString(R.string.min_tags), Snackbar.LENGTH_LONG).setAction("Action", null).show(); }
 
@@ -149,8 +149,13 @@ public class PostsActivity extends AppCompatActivity {
 
 
 
-                Post post = new Post(mPostText.getText().toString(), mTitle.getText().toString() ,main.user.mUsername, imgaddr1, imgaddr2, mTags.getText().toString(),mCategories.getSelectedItemId(), latitude, longitude);
-                postRef.push().setValue(post);
+                Post post = new Post(mPostText.getText().toString(), mTitle.getText().toString() , OakappMain.firebaseUser.getUid() , imgaddr1, imgaddr2, mTags.getText().toString(),mCategories.getSelectedItemId(), latitude, longitude);
+                post.mKey = postRef.push().getKey();
+                OakappMain.user.mOwnPosts.add(post.mKey);
+                post.AddComment("prvy koment",false,null);
+                post.AddComment("druhy",false,null);
+                OakappMain.SaveUserByUid(OakappMain.user);
+                OakappMain.SavePostByKey(post);
             }
         });
 

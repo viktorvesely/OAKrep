@@ -7,7 +7,9 @@ import android.os.Bundle;
 public class openPost extends AppCompatActivity {
 
     private Post mPost;
-    OakappMain main;
+    private User mOwner;
+
+    private OakappMain main;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,7 +18,17 @@ public class openPost extends AppCompatActivity {
 
         main = (OakappMain) getApplicationContext();
         Intent intent = getIntent();
-        mPost = main.postsToShow.get(intent.getIntExtra("id",0));
+        mPost = OakappMain.postsToShow.get(intent.getIntExtra("id",0));
+        OakappMain.getUserByUid(mPost.mOwner, new UserInterface() {
+            @Override
+            public void UserListener(User u) {
+                mOwner = u;
+                //also draw him
+            }
+        });
+
+
+
 
     }
 }

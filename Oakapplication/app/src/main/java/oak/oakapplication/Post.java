@@ -25,15 +25,19 @@ public class Post {
         this.mLatitude = Latitude;
         this.mLongitude = Longitude;
 
-        this.mReputation = defaultRep;
+        this.mReputation = (int)(OakappMain.user.mReputation / 100 * headtstartPercentage);
         this.mTimestamp = System.currentTimeMillis();
         this.mLastActivity = System.currentTimeMillis();
-        this.comments = new ArrayList<Comment>();
+        //init comments ?
         this.mActive = true;
     }
 
+    public void AddComment(String text, boolean directMsg, String target)
+    {
+        comments.add(new Comment(text, mOwner, mKey, directMsg, target));
+    }
 
-    //private List<Comment> mComments; in a future
+
     //user set
     public String mText;
     public String mTitle;
@@ -52,8 +56,9 @@ public class Post {
     public boolean mActive;
 
     //may change in future
-    public ArrayList<Comment> comments;
+    public List<Comment> comments;
 
     //static
     private static final int defaultRep = 0;
+    private static final int headtstartPercentage = 5;
 }
